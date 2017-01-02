@@ -121,9 +121,9 @@ public class Convertor extends JFrame{
         loadDictionary.addActionListener(buttonclick);
         convertButton.addActionListener(buttonclick);
         arraysCombo = new JComboBox();
-        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation27K", "27k_annotation.csv"));
-        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation450K", "450k_annotation.csv"));
-        arraysCombo.addItem(new ComboItem("Infinium MethylationEPIC", "850k_annotation.csv"));
+        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation27K", "27k_annotation_noIntergenicSite.csv"));
+        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation450K", "450k_annotation_noIntergenicSite.csv"));
+        arraysCombo.addItem(new ComboItem("Infinium MethylationEPIC", "epic_annotation_noIntergenicSite.csv"));
         arraysCombo.addItem(new ComboItem("WGBS",""));
         separatorCombo = new JComboBox();
         separatorCombo.addItem(new ComboItem("comma",","));
@@ -133,6 +133,8 @@ public class Convertor extends JFrame{
         separatorCombo.addItem(new ComboItem("dash","-"));
         arraysCombo.setSelectedIndex(1);
         separatorCombo.setPreferredSize(arraysCombo.getPreferredSize());
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(((ComboItem) arraysCombo.getSelectedItem()).getValue());
         dictionaryText.setText(System.getProperty("user.dir") + "/" + ((ComboItem) arraysCombo.getSelectedItem()).getValue());
         dictionaryFile = new File(dictionaryText.getText());
         ListenForCombo lForCombo = new ListenForCombo();
