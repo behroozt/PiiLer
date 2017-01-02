@@ -133,9 +133,8 @@ public class Convertor extends JFrame{
         separatorCombo.addItem(new ComboItem("dash","-"));
         arraysCombo.setSelectedIndex(1);
         separatorCombo.setPreferredSize(arraysCombo.getPreferredSize());
-        System.out.println(System.getProperty("user.dir"));
-        System.out.println(((ComboItem) arraysCombo.getSelectedItem()).getValue());
-        dictionaryText.setText(System.getProperty("user.dir") + "/" + ((ComboItem) arraysCombo.getSelectedItem()).getValue());
+        
+        dictionaryText.setText(System.getProperty("user.dir") + "/Dictionaries/" + ((ComboItem) arraysCombo.getSelectedItem()).getValue());
         dictionaryFile = new File(dictionaryText.getText());
         ListenForCombo lForCombo = new ListenForCombo();
         separatorCombo.addItemListener(lForCombo);
