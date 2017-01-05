@@ -121,10 +121,10 @@ public class Convertor extends JFrame{
         loadDictionary.addActionListener(buttonclick);
         convertButton.addActionListener(buttonclick);
         arraysCombo = new JComboBox();
-        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation27K", "27k_annotation_noIntergenicSite.csv"));
-        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation450K", "450k_annotation_noIntergenicSite.csv"));
-        arraysCombo.addItem(new ComboItem("Infinium MethylationEPIC", "epic_annotation_noIntergenicSite.csv"));
-        arraysCombo.addItem(new ComboItem("WGBS",""));
+        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation27K", "27k_annotated_noIntergenic.csv"));
+        arraysCombo.addItem(new ComboItem("Infinium HumanMethylation450K", "450k_annotated_noIntergenic.csv"));
+        arraysCombo.addItem(new ComboItem("Infinium MethylationEPIC", "850k_annotated_noIntergenic.csv"));
+        arraysCombo.addItem(new ComboItem("RRBS (Bismark Coverage File)",""));
         separatorCombo = new JComboBox();
         separatorCombo.addItem(new ComboItem("comma",","));
         separatorCombo.addItem(new ComboItem("tab","\t"));
@@ -284,9 +284,13 @@ public class Convertor extends JFrame{
             	rowCounter++;
             	String[] info = new String[3];
 				progressBar.setValue(rowCounter);
-				elements = line.split(","); // elements {cpgID, position, geneName, region}	
-				info[0] = elements[1]; // position
-				info[1] = elements[2]; // geneName
+//				elements = line.split(","); // elements {cpgID, position, geneName, region}	
+//				info[0] = elements[1]; // position
+//				info[1] = elements[2]; // geneName
+//				info[2] = elements[3]; // region
+				elements = line.split(","); // elements {cpgID/position, geneName, position(for array),region}	
+				info[0] = elements[1]; // geneName
+				info[1] = elements[2]; // position
 				info[2] = elements[3]; // region
 				cpgMap.put(elements[0], info);
             }
@@ -329,19 +333,29 @@ public class Convertor extends JFrame{
             	header += elements[i] + ",";
             }
             outFile.println(header.substring(0,header.length()-1));
-            String siteID, convertedLine = null;
+            String siteID = null, convertedLine = null;
+            
+            int valuesIndex = 1;
+            if (arraysCombo.getSelectedIndex() == 3) valuesIndex = 2;
             
             while ((line = br.readLine()) != null){
             	rowCounter++;
 				progressBar.setValue(rowCounter);
 				elements = line.split(splitBy);
-				siteID = elements[0];
+				if (arraysCombo.getSelectedIndex() == 3){
+					siteID = "chr" + elements[0] + ":" + elements[1];
+				}
+				else {
+					siteID = elements[0];
+				}
 				
 				if (cpgMap.containsKey(siteID)){
 					
-					convertedLine = cpgMap.get(siteID)[1] + "_" + siteID + "_" +
-							cpgMap.get(siteID)[0] + "_" + cpgMap.get(siteID)[2] + ",";
-					for (int i = 1; i < elements.length; i ++){
+					convertedLine = cpgMap.get(siteID)[0] + "_" + siteID;
+					if (cpgMap.get(siteID)[1] != null) convertedLine += "_" + cpgMap.get(siteID)[1];
+					if (cpgMap.get(siteID)[2] != null) convertedLine += "_" + cpgMap.get(siteID)[2];
+					convertedLine += ",";
+					for (int i = valuesIndex; i < elements.length; i ++){
 						convertedLine += elements[i] + ",";
 					}
 					outFile.println(convertedLine.substring(0, convertedLine.length()-1));					
