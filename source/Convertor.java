@@ -356,7 +356,13 @@ public class Convertor extends JFrame{
 					if (cpgMap.get(siteID)[2] != null) convertedLine += "_" + cpgMap.get(siteID)[2];
 					convertedLine += ",";
 					for (int i = valuesIndex; i < elements.length; i ++){
-						convertedLine += elements[i] + ",";
+						if (arraysCombo.getSelectedIndex() == 3){
+							convertedLine += Integer.parseInt(elements[i])/100 + ",";
+						}
+						else {
+							convertedLine += elements[i] + ",";
+						}
+						
 					}
 					outFile.println(convertedLine.substring(0, convertedLine.length()-1));					
 				}
